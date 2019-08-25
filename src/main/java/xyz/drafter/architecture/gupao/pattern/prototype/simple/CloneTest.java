@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * @author wangmeng
  * @date 2019/8/23
- * @desciption 浅复制 ，属性完全一样，引用复制
+ * @desciption 浅复制 ，属性完全一样，地址引用复制
  */
 public class CloneTest {
 
