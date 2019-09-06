@@ -7,7 +7,7 @@
 	
 	<servlet>
 		<servlet-name>springmvc</servlet-name>
-		<servlet-class>xyz.drafter.architecture.gupao.springV1.servlet.DispatchServlet</servlet-class>
+		<servlet-class>xyz.drafter.architecture.gupao.springV2.framework.webmvc.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>classpath:application.properties</param-value>
