@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2019/9/5
  * @desciption classPathXmlApplication
  */
-public class GPApplicationContext implements BeanFactory {
+public class GPApplicationContext extends GPDefaultListableBeanFactory implements BeanFactory {
 
     private String[] configLocations;
 

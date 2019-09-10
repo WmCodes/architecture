@@ -30,10 +30,17 @@ public class GPViewResolver {
         while (null != (line = ra.readLine())){
             Matcher m = matcher(line);
             while (m.find()){
-                for (int i = 1;i<m.groupCount();i++){
+                for (int i = 1;i<=m.groupCount();i++){
+                    // #{11} 取出中间的字符串
+                    String paramName = m.group(i);
+                    Object paramValue = mv.getModel().get(paramName);
+                    if (null == paramName){continue;}
+                    line = line.replace("#\\{"+paramName+"\\}", paramValue.toString());
+
 
                 }
             }
+            sb.append(line);
         }
 
         return null;

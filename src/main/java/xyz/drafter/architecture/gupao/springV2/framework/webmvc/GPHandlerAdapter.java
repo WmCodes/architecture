@@ -39,11 +39,15 @@ public class GPHandlerAdapter {
             paramValus[index] = caseStringValue(value, paramTypes[index]);
         }
 
-        int reqIndex = this.paramMapping.get(HttpServletRequest.class.getName());
-        paramValus[reqIndex] = req;
+        if (this.paramMapping.containsKey(HttpServletRequest.class.getName())) {
+            int reqIndex = this.paramMapping.get(HttpServletRequest.class.getName());
+            paramValus[reqIndex] = req;
+        }
 
-        int respIndex = this.paramMapping.get(HttpServletResponse.class.getName());
-        paramValus[respIndex] = resp;
+        if (this.paramMapping.containsKey(HttpServletResponse.class.getName())) {
+            int respIndex = this.paramMapping.get(HttpServletResponse.class.getName());
+            paramValus[respIndex] = resp;
+        }
 
         Object result = handlerMapping.getMethod().invoke(handlerMapping.getController(), paramTypes);
 
