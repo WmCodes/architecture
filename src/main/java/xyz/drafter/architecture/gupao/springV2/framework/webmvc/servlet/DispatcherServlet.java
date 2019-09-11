@@ -3,6 +3,7 @@ package xyz.drafter.architecture.gupao.springV2.framework.webmvc.servlet;
 import xyz.drafter.architecture.gupao.springV2.framework.annotation.Controller;
 import xyz.drafter.architecture.gupao.springV2.framework.annotation.RequestMapping;
 import xyz.drafter.architecture.gupao.springV2.framework.annotation.RequestParam;
+import xyz.drafter.architecture.gupao.springV2.framework.aop.GPProxyUtils;
 import xyz.drafter.architecture.gupao.springV2.framework.context.GPApplicationContext;
 import xyz.drafter.architecture.gupao.springV2.framework.webmvc.GPHandlerAdapter;
 import xyz.drafter.architecture.gupao.springV2.framework.webmvc.GPHandlerMapping;
@@ -137,7 +138,13 @@ public class DispatcherServlet extends HttpServlet {
         // 从容器中取到
         String[] beanNames = context.getBeanDefinitionNames();
         for (String beanName : beanNames) {
-            Object controller = context.getBean(beanName);
+            Object proxy = context.getBean(beanName);
+            Object controller = null;
+            try {
+                controller = GPProxyUtils.getTargetObject(proxy);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             Class<?> clazz = controller.getClass();
             //
             if (!clazz.isAnnotationPresent(Controller.class)) {

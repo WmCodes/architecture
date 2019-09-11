@@ -3,6 +3,7 @@ package xyz.drafter.architecture.gupao.springV2.framework.context;
 import xyz.drafter.architecture.gupao.springV2.framework.annotation.Autowired;
 import xyz.drafter.architecture.gupao.springV2.framework.annotation.Controller;
 import xyz.drafter.architecture.gupao.springV2.framework.annotation.Service;
+import xyz.drafter.architecture.gupao.springV2.framework.aop.GPAopConfig;
 import xyz.drafter.architecture.gupao.springV2.framework.beans.BeanDefinition;
 import xyz.drafter.architecture.gupao.springV2.framework.beans.BeanPostProcessor;
 import xyz.drafter.architecture.gupao.springV2.framework.beans.BeanWrapper;
@@ -10,11 +11,14 @@ import xyz.drafter.architecture.gupao.springV2.framework.context.support.BeanDef
 import xyz.drafter.architecture.gupao.springV2.framework.core.BeanFactory;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author wangmeng
@@ -54,6 +58,9 @@ public class GPApplicationContext extends GPDefaultListableBeanFactory implement
         // 依赖注入(lazy-init = false)
         // 自动调用getBean 方法
         doAutowrited();
+
+
+
 
     }
 
@@ -167,6 +174,7 @@ public class GPApplicationContext extends GPDefaultListableBeanFactory implement
             beanPostProcessor.postProcessBeforeInitialization(instance,beanName);
 
             BeanWrapper beanWrapper = new BeanWrapper(instance);
+            beanWrapper.setAopConfig(instantisonAopConfig(beanDefinition));
             beanWrapper.setPostProcessor(beanPostProcessor);
             this.beanWrapperMap.put(beanName, beanWrapper);
 
@@ -187,6 +195,29 @@ public class GPApplicationContext extends GPDefaultListableBeanFactory implement
         }
 
         return null;
+    }
+
+    private GPAopConfig instantisonAopConfig(BeanDefinition beanDefinition) throws Exception {
+        GPAopConfig config = new GPAopConfig();
+        String expression = reader.getConfig().getProperty("pointCut");
+        String[] before = reader.getConfig().getProperty("aspectBefore").split("\\s");
+        String[] after = reader.getConfig().getProperty("aspectAfter").split("\\s");
+        String className = beanDefinition.getBeanClassName();
+        Class<?> clazz = Class.forName(className);
+
+        Pattern pattern = Pattern.compile(expression);
+
+        Class aspectClass = Class.forName(before[0]);
+        for (Method m:clazz.getMethods()){
+            //public java.lang.string com.xxxx.yyyy.aaa.*ServiceImpl.add(Java.lang.String ,java.lang.String)
+            Matcher matcher = pattern.matcher(m.toString());
+            if (matcher.matches()){
+                // 满足切面规则的类添加到AOP配置中
+                config.put(m, aspectClass.newInstance(), new Method[]{aspectClass.getMethod(before[1]),aspectClass.getMethod(after[1])});
+            }
+        }
+
+        return config;
     }
 
     // 传一个BeanDefinition 返回一个实例Bean
