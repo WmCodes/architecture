@@ -1,5 +1,7 @@
 package xyz.drafter.architecture.gupao.springV2.framework.beans;
 
+import xyz.drafter.architecture.gupao.springV2.framework.aop.GPAopConfig;
+import xyz.drafter.architecture.gupao.springV2.framework.aop.GPAopProxy;
 import xyz.drafter.architecture.gupao.springV2.framework.core.FactoryBean;
 
 /**
@@ -8,6 +10,10 @@ import xyz.drafter.architecture.gupao.springV2.framework.core.FactoryBean;
  * @desciption
  */
 public class BeanWrapper  extends FactoryBean {
+
+
+
+    private GPAopProxy aopProxy = new GPAopProxy();
 
     // 还会用到 观察者 模式
     // 1.支持事件响应，会有一个箭筒
@@ -19,7 +25,7 @@ public class BeanWrapper  extends FactoryBean {
     private Object originalInstance;
 
     public BeanWrapper(Object instance){
-        this.wrapperInstance = instance;
+        this.wrapperInstance = aopProxy.getProxy(instance);
         this.originalInstance = instance;
     }
 
@@ -40,5 +46,9 @@ public class BeanWrapper  extends FactoryBean {
 
     public void setPostProcessor(BeanPostProcessor postProcessor) {
         this.postProcessor = postProcessor;
+    }
+
+    public void setAopConfig(GPAopConfig config){
+        aopProxy.setConfig(config);
     }
 }
