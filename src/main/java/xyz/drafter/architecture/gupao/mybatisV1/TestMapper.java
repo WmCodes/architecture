@@ -1,10 +1,13 @@
 package xyz.drafter.architecture.gupao.mybatisV1;
 
+import java.util.Map;
+
 /**
  * @author wangmeng
  * @date 2019/9/17
  * @desciption
  */
-public interface Executor {
-    <T> T query(String statement, String parameter);
+public interface TestMapper {
+
+    Map selectByPrimaryKay(Integer userId);
 }
