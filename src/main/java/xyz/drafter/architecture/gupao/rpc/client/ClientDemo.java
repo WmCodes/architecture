@@ -8,8 +8,11 @@ package xyz.drafter.architecture.gupao.rpc.client;
 public class ClientDemo {
 
     public static void main(String[] args) {
-        Hello hello = null;
-        hello.sayHello("mic");
+        RpcClientProxy rpcClientProxy = new RpcClientProxy();
+
+        Hello hello = rpcClientProxy.clientProxy(Hello.class, "localhost", 8888);
+
+        System.out.println(hello.sayHello("mic"));
 
     }
 }

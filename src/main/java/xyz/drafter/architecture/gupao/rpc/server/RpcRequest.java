@@ -1,4 +1,4 @@
-package xyz.drafter.architecture.gupao.rpc.client;
+package xyz.drafter.architecture.gupao.rpc.server;
 
 import java.io.Serializable;
 
@@ -9,9 +9,7 @@ import java.io.Serializable;
  */
 public class RpcRequest implements Serializable {
 
-
     private static final long serialVersionUID = -7393782181875591702L;
-
     private String className;
     private String methodName;
     private Object[] parameters;

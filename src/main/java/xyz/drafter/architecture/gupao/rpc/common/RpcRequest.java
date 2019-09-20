@@ -1,11 +1,11 @@
-package xyz.drafter.architecture.gupao.rpc.client;
+package xyz.drafter.architecture.gupao.rpc.common;
 
 import java.io.Serializable;
 
 /**
  * @author wangmeng
  * @date 2019/9/19
- * @desciption
+ * @desciption 序列化的包名需要一致
  */
 public class RpcRequest implements Serializable {
 

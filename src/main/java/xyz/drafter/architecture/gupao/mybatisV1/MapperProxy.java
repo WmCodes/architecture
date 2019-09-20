@@ -20,11 +20,11 @@ public class MapperProxy implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass().getName().equals(Configuration.TestMapperXml.namespace)) {
             String sql = Configuration.TestMapperXml.methodSqlMapping.get(method.getName());
-            sqlSession.selectOne(sql,String.valueOf(args[0]));
+            return sqlSession.selectOne(sql,String.valueOf(args[0]));
         }
 
 
-        return null;
+        return method.invoke(this, args);
     }
 
 
